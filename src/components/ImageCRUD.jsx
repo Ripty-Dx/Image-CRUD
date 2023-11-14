@@ -1,9 +1,35 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
 
 const ImageCRUD = () => {
-  const onSubmit = () => {};
+  const [file, setFile] = useState();
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    const url = "/images";
+    formData.append("file", file);
+    formData.append("fileName", file.name);
+    const config = {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    console.log(url);
+    try {
+      axios.post(url, formData, config).then((response) => {
+        console.log(response.data);
+        console.log(response.data.fileUrl);
+        console.log(response);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
   const imageUpload = (e) => {
     console.log(e.target.files);
+    setFile(e.target.files[0]);
+    console.log(URL.createObjectURL(e.target.files[0]));
   };
   return (
     <div className="container-fluid">
